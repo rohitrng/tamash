@@ -128,6 +128,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('account_create',[AdminController::class, 'account_create']);
     Route::get('create_user_after_account', [AdminController::class, 'create_user_after_account']);
     Route::post('deposit_info',[AdminController::class, 'deposit_info']);
+    Route::post('withdraw_info',[AdminController::class, 'withdraw_info']);
+    Route::post('password_change',[AdminController::class, 'password_change']);
+    Route::post('upi', [AdminController::class, 'upi']);
 
     Route::resource('inquiry-data', InquiryController::class);
     Route::get('inquiry-data-show', [InquiryController::class,'show'])->name('inquiry-data');

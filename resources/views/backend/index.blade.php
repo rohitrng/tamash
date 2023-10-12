@@ -1,6 +1,73 @@
 @extends('backend.layouts.main')
 @section('main-container')
-    
+                    <!-- start dash info -->
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="card dash-header-box shadow-none border-0">
+                                <div class="card-body p-0">
+                                    <div class="row row-cols-xxl-4 row-cols-md-3 row-cols-1 g-0">
+                                        <div class="col">
+                                            <div class="mt-md-0 py-3 px-4 mx-2">
+                                                <p class="text-white-50 mb-2 text-truncate">Total Balance </p>
+                                                <h3 class="text-white mb-0">
+                                                    @if(!empty($total_balance->total_deposit_amount))
+                                                        {{  $total_balance->total_deposit_amount  }}
+                                                    @else
+                                                        0
+                                                    @endif
+                                                </h3>
+                                            </div>
+                                        </div><!-- end col -->
+
+                                        <div class="col">
+                                            <div class="mt-3 mt-md-0 py-3 px-4 mx-2">
+                                                <p class="text-white-50 mb-2 text-truncate">Exchange Balance</p>
+                                                <h3 class="text-white mb-0">
+                                                    @if(!empty($total_withdraw->total_withdraw_amount))
+                                                        {{  $total_withdraw->total_withdraw_amount  }}
+                                                    @else
+                                                        0
+                                                    @endif
+                                                </h3>
+                                            </div>
+                                        </div><!-- end col -->
+
+                                        <div class="col">
+                                            <div class="mt-3 mt-md-0 py-3 px-4 mx-2">
+                                                <p class="text-white-50 mb-2 text-truncate">Deposit</p>
+                                                <h3 class="text-white mb-0">
+                                                    <button type="button" id="deposit_amount_seesion" class="btn btn-success btn-rounded">Deposit</button>
+                                                </h3>
+                                            </div>
+                                        </div><!-- end col -->
+
+                                        <div class="col">
+                                            <div class="mt-3 mt-md-0 py-3 px-4 mx-2">
+                                                <p class="text-white-50 mb-2 text-truncate">Withdraw</p>
+                                                <h3 class="text-white mb-0">
+                                                    <button type="button" class="btn btn-purple btn-rounded">Withdraw</button>
+                                                </h3>
+                                            </div>
+                                        </div><!-- end col -->
+
+                                    </div><!-- end row -->
+                                </div><!-- end card body -->
+                            </div><!-- end card -->
+                        </div><!-- end col -->
+                    </div>
+                    <!-- end dash info -->
+                </div>
+            </div>
+
+              <!-- start dash troggle-icon -->
+              <div>
+                <a class="dash-troggle-icon" id="dash-troggle-icon" data-bs-toggle="collapse" href="#dashtoggle" aria-expanded="true" aria-controls="dashtoggle">
+                    <i class="bx bx-up-arrow-alt"></i>
+                </a>
+            </div>
+          <!-- end dash troggle-icon -->
+
+        </header>
         <!-- ============================================================== -->
         <!-- Start right Content here -->
         <!-- ============================================================== -->
@@ -268,7 +335,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <input type="text" class="form-control" id="createuser" placeholder="Type Username">
+                <input type="text" class="form-control" name="name" id="createuser" placeholder="Type Username">
+                <div id="notificationcreateuser" class="alert alert-success" style="display: none;"></div>
                 <input type="hidden" id="id_p" value="">
             </div>
             <div class="modal-footer">
@@ -293,14 +361,106 @@
                 </button>
             </div>
             <div class="modal-body">
-                <input type="number" class="form-control" id="deposit_amountuser" placeholder="Amount">
-                <input type="text" id="deposit_amountuser_id" value="">
+                <span>Amount</span>
+                <input type="number" class="form-control" id="deposit_amountuser" placeholder="Type Amount">
+                <input type="hidden" id="deposit_amountuser_id" value="">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light"
                     data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" id="deposit_save">Deposit</button>
             </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- sample modal content -->
+<div id="myModalwith" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Withdraw</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <span>Amount</span>
+                <input type="number" class="form-control" id="withdraw_amountuser" placeholder="Type Amount">
+                <input type="hidden" id="withdraw_amountuser_id" value="">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light"
+                    data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="withdraw_save">Withdraw</button>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- sample modal content -->
+<div id="myModalpass" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Password Change</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <span>New Password</span>
+                <input type="text" class="form-control" id="passwordnew_amountuser" placeholder="Type New Password *">
+                <span>Confirm Password</span>
+                <input type="text" class="form-control" id="passwordcon_amountuser" placeholder="Type Confirm Password *">
+                <input type="hidden" id="password_amountuser_id" value="">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light"
+                    data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="password_save">Password Change</button>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- sample modal content -->
+<div id="myModaldeposit_amount_seesion" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Select payment type</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                
+            
+                <div class="form-group">
+                    <select id="mySelect" class="form-control">
+                    <option value="">Select payment type</option>
+                    <option value="option1">UPI</option>
+                    <option value="option2">Google Pay</option>
+                    <option value="option3">Phone pay</option>
+                    </select>
+                </div>
+                
+
+                <div class="alert alert-info mt-3" id="message"></div>
+
+            </div>
+            <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-light"
+                    data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="password_save">Submit</button>
+            </div> -->
 
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -344,6 +504,9 @@
       </div>
     </div>
   </div>
+  
+
+  
 </div>
 
 
@@ -369,25 +532,33 @@
                id : id_p,
            },
            success: function (response) {
-            $("#myModal").modal("hide");
-            console.log(response.user_name);
+            
             var data = JSON.parse(response);
-
-            $("#myModal2").on("shown.bs.modal", function () {
-                // Set the text values and image source here
-                $("#responseName").text(data.user_name);
-                $("#url_web").text(data.url_web);
-                $("#responsePassword").text(data.user_password);
-                $("#responseImage").attr("src", data.parent_user_image);
-            });
-            refreshUserAccountList();
-            // Show the modal
-            $("#myModal2").modal("show");
+            if (data.error != null) {
+                var notification = $("#notificationcreateuser");
+                notification.text(data.error.name);
+                notification.addClass("show alert-danger");
+                notification.css("display", "block");
+            } else {
+                $("#myModal").modal("hide");
+                $("#myModal2").on("shown.bs.modal", function () {
+                    // Set the text values and image source here
+                    $("#responseName").text(data.user_name);
+                    $("#url_web").text(data.url_web);
+                    $("#responsePassword").text(data.user_password);
+                    $("#responseImage").attr("src", data.parent_user_image);
+                });
+                refreshUserAccountList();
+                // Show the modal
+                $("#myModal2").modal("show");
+                $('#id_p').val("")
+            }
+            
            }
 
        });
 
-        $('#id_p').val("")
+        
     })
 
 
@@ -398,15 +569,47 @@
             dataType: 'json', // Specify the data type you expect
             success: function (data) {
                 // Clear the existing user account list
-                $('#new_useraccounts').empty();
+                // $('#new_useraccounts').empty();
+                var userList = document.getElementById('new_useraccounts');
+
+                // Clear the current content inside the ul element
+                userList.innerHTML = '';
+
                 console.log(data);
                 // Iterate over the updated data and append new list items
-                $.each(data, function (index, account) {
-                    var listItem = '<li class="active"><a href="#"><div class="d-flex align-items-start"><div class="flex-shrink-0 user-img online align-self-center me-3"><img src="' + account.parent_user_image + '" class="rounded-circle avatar-sm" alt=""><span class="user-status"></span></div><div class="flex-grow-1 overflow-hidden"><h5 class="text-truncate font-size-14 mb-1">' + account.user_name + '</h5><p class="text-truncate mb-0">' + account.url_web + '</p><br><button type="button" class="btn btn-success btn-rounded deposit_usera" data-id="'+account.id+'">Deposit</button><button type="button" class="btn btn-purple btn-rounded withdraw_usera" data-id="'+account.id+'">Withdraw</button><button type="button" class="btn btn-warning btn-rounded password_userc" data-id="'+account.id+'">Password</button></div><div class="flex-shrink-0"><div class="font-size-11">' + account.create_at + '</div></div></div></a></li>';
+                // $.each(data, function (index, account) {
+                //     var listItem = '<li class="active"><a href="#"><div class="d-flex align-items-start"><div class="flex-shrink-0 user-img online align-self-center me-3"><img src="' + account.parent_user_image + '" class="rounded-circle avatar-sm" alt=""><span class="user-status"></span></div><div class="flex-grow-1 overflow-hidden"><h5 class="text-truncate font-size-14 mb-1">' + account.user_name + '</h5><p class="text-truncate mb-0">' + account.url_web + '</p><br><button type="button" class="btn btn-success btn-rounded deposit_usera1" data-id="'+account.id+'">Deposit</button><button type="button" class="btn btn-purple btn-rounded withdraw_usera" data-id="'+account.id+'">Withdraw</button><button type="button" class="btn btn-warning btn-rounded password_userc" data-id="'+account.id+'">Password</button></div><div class="flex-shrink-0"><div class="font-size-11">' + account.create_at + '</div></div></div></a></li>';
 
-                    // Append the new list item to the user account list
-                    $('#new_useraccounts').append(listItem);
-                });
+                //     // Append the new list item to the user account list
+                //     $('#new_useraccounts').append(listItem);
+                // });
+
+                data.forEach(function(account) {
+                var listItem = document.createElement('li');
+                listItem.classList.add('active');
+                listItem.innerHTML = `
+                    <a href="#">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-shrink-0 user-img online align-self-center me-3">
+                                <img src="${account.parent_user_image}" class="rounded-circle avatar-sm" alt="">
+                                <span class="user-status"></span>
+                            </div>
+                            <div class="flex-grow-1 overflow-hidden">
+                                <h5 class="text-truncate font-size-14 mb-1">${account.user_name}</h5>
+                                <p class="text-truncate mb-0">${account.url_web}</p><br>
+                                <button type="button" class="btn btn-success btn-rounded deposit_usera" data-bs-target="#myModaldep" data-id="${account.id}">Deposit</button>
+                                <button type="button" class="btn btn-purple btn-rounded withdraw_usera" data-bs-target="#myModalwith" data-id="${account.id}">Withdraw</button>
+                                <button type="button" class="btn btn-warning btn-rounded password_userc" data-bs-target="#myModalpass" data-id="${account.id}">Password</button>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <div class="font-size-11">${account.create_at}</div>
+                            </div>
+                        </div>
+                    </a>
+                `;
+                userList.appendChild(listItem);
+            });
+
             },
             error: function (error) {
                 console.error('Error fetching user account data: ' + error);
@@ -414,9 +617,9 @@
         });   
     }
 
-    $(".deposit_usera").click(function(event){
+    $(document).on("click", ".deposit_usera", function(event) {
         var id = $(this).data('id');
-        $("#deposit_amountuser_id").val(id)
+        $("#deposit_amountuser_id").val(id);
         $("#myModaldep").modal("show");
     });
 
@@ -443,6 +646,11 @@
                 notification.text(data.message);
                 notification.addClass("show alert-danger");
                 notification.css("display", "block");
+            } else if (data.message == 'User balance not found') {
+                var notification = $("#notification");
+                notification.text(data.message);
+                notification.addClass("show alert-danger");
+                notification.css("display", "block");
             } else {
                 var notification = $("#notification");
                 notification.text(data.message);
@@ -465,17 +673,198 @@
        });
     })
 
-    $(".withdraw_usera").click(function(event){
-        var id = $(this).data('id')
-        alert(id)
+    $(document).on("click", ".withdraw_usera", function(event) {
+        var id = $(this).data('id');
+        $("#withdraw_amountuser_id").val(id);
+        $("#myModalwith").modal("show");
     });
 
-    $(".password_userc").click(function(event){
-        var id = $(this).data('id')
-        alert(id)
+    // withdraw_save
+    $('#withdraw_save').click(function (event) {
+        var withdraw_amount = $('#withdraw_amountuser').val();
+        var sub_acount_id = $('#withdraw_amountuser_id').val();
+        var myUrl = "{{url('withdraw_info')}}";
+        $.ajax({
+           url: myUrl,
+           type: "POST",
+           data: { 
+               "_token": "{{ csrf_token() }}",
+               withdraw_amount : withdraw_amount,
+               sub_acount_id : sub_acount_id,
+           },
+           success: function (response) {
+            $("#myModalwith").modal("hide");
+            var data = JSON.parse(response);
+            // insufficient balance
+            if (data.message == 'insufficient balance') {
+                var notification = $("#notification");
+                notification.text(data.message);
+                notification.addClass("show alert-danger");
+                notification.css("display", "block");
+            } else if (data.message == 'User balance not found') {
+                var notification = $("#notification");
+                notification.text(data.message);
+                notification.addClass("show alert-danger");
+                notification.css("display", "block");
+            } else {
+                var notification = $("#notification");
+                notification.text(data.message);
+                notification.addClass("show alert-success");
+                notification.css("display", "block");
+            }
+
+            setTimeout(function () {
+                notification.removeClass("show");
+                notification.css("display", "none");
+            }, 3000);
+
+            // refreshUserAccountList();
+                        $('#withdraw_amountuser').val("");
+            // $('#deposit_amountuser_id').val("");
+           }
+
+
+
+       });
+    })
+
+    $(document).on("click", ".password_userc", function(event) {
+        var id = $(this).data('id');
+        $("#password_amountuser_id").val(id);
+        $("#myModalpass").modal("show");
     });
 
+// password_save
+    $('#password_save').click(function (event) {
+        var passwordnew_amountuser = $('#passwordnew_amountuser').val();
+        var passwordcon_amountuser = $('#passwordcon_amountuser').val();
+        var sub_acount_id = $('#password_amountuser_id').val();
+        if (passwordnew_amountuser == passwordcon_amountuser) {
+            var myUrl = "{{url('password_change')}}";
+            $.ajax({
+            url: myUrl,
+            type: "POST",
+            data: { 
+                "_token": "{{ csrf_token() }}",
+                passwordnew_amountuser : passwordnew_amountuser,
+                passwordcon_amountuser : passwordcon_amountuser,
+                sub_acount_id : sub_acount_id,
+            },
+            success: function (response) {
+                $("#myModalpass").modal("hide");
+                var data = JSON.parse(response);
+                // insufficient balance
+                if (data.message == 'insufficient balance') {
+                    var notification = $("#notification");
+                    notification.text(data.message);
+                    notification.addClass("show alert-danger");
+                    notification.css("display", "block");
+                } else if (data.message == 'User balance not found') {
+                    var notification = $("#notification");
+                    notification.text(data.message);
+                    notification.addClass("show alert-danger");
+                    notification.css("display", "block");
+                } else {
+                    var notification = $("#notification");
+                    notification.text(data.message);
+                    notification.addClass("show alert-success");
+                    notification.css("display", "block");
+                }
+
+                setTimeout(function () {
+                    notification.removeClass("show");
+                    notification.css("display", "none");
+                }, 3000);
+
+                // refreshUserAccountList();
+                $('#withdraw_amountuser').val("");
+                // $('#deposit_amountuser_id').val("");
+            }
+
+
+
+        });
+        } else {
+            $("#myModalpass").modal("hide");
+            var notification = $("#notification");
+                notification.text("Password Not Match");
+                notification.addClass("show alert-danger");
+                notification.css("display", "block");
+        }
+        
+    })
+
+    $(document).on("click", "#deposit_amount_seesion", function(event) {
+        $("#myModaldeposit_amount_seesion").modal("show");
+    });
+
+    var select = document.getElementById("mySelect");
+    var messageDiv = document.getElementById("message");
+
+    select.addEventListener("change", function () {
+        var selectedOption = select.value;
+
+        if (selectedOption === "option1") {
+            messageDiv.innerHTML = `
+  <div class="container mt-2">
+    <div class="wallet-box-main clearfix">
+      <div class="wallet-balance">
+        <h5>Make payment and upload screenshot</h5>
+        <div class="payment-detail mt-2 row">
+          <div class="col-md-8">
+            <div class="payment-detail-box">
+              <span>UPI Name</span>
+              <span>tamashabook<i class="far fa-clone ml-2 c-ptr"></i></span>
+            </div>
+            <div class="payment-detail-box">
+              <span>UPI Number</span>
+              <span>tamashabook2@okicici<i class="far fa-clone ml-2 c-ptr"></i></span>
+            </div>
+            <div class="w-100 text-center mt-1 mb-1">
+              <img src="https://sitedataprovider.com/api/upi_qr_code?name=tamashabook&amp;upi=tamashabook2@okicici" alt="Trulli" width="133" height="133">
+            </div>
+            <div class="wallet-trx-id w-100 mt-1 mb-1">
+              <p class="theme-edit-note"><span><span>Note: upi</span></span></p>
+            </div>
+            <form method="post" action="{{ url('upi') }}" enctype="multipart/form-data">
+                @csrf
+                <div class="theme-input-box">
+                    <input name="amount" class="theme-input" type="number" placeholder="Amount">
+                    <input name="pay" class="theme-input" value="upi" type="hidden" placeholder="Amount">
+                </div>
+                <div class="mt-2 upload-ss">
+                    <input type="file" id="upload-1132" name="photo" hidden accept="image/png, image/jpg, image/jpeg">
+                    <label for="upload-1132">
+                        <i class="fas fa-plus-circle mr-1"></i>Click here to upload payment screenshot
+                    </label>
+                </div>
+                <div class="mt-2">
+                    <small>Must have a valid image (PNG, JPG, JPEG) and not more than 5MB.</small>
+                </div>
+                <div class="mt-2">
+                    <!-- Add more input fields here if needed -->
+                    <button type="submit" class="btn btn-primary btn-sm w-100">
+                        <span>Submit</span>
+                    </button>
+                </div>
+            </form>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+`;
+
+        // messageDiv.innerHTML = "You selected Option 1 - This is the message for Option 1.";
+        } else if (selectedOption === "option2") {
+        messageDiv.innerHTML = "You selected Option 2 - This is the message for Option 2.";
+        } else if (selectedOption === "option3") {
+        messageDiv.innerHTML = "You selected Option 3 - This is the message for Option 3.";
+        } else {
+        messageDiv.innerHTML = "";
+        }
+    });
 </script>
-
 
 @endsection 
